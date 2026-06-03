@@ -226,15 +226,18 @@ function App() {
   }
 
   const handleAnswer = () => {
-    if (!currentQuestion || answerIndex === null || result?.status === 'correct') return
+    if (!currentQuestion || answerIndex === null || result?.status === 'riddle' || result?.status === 'correct') return
     if (completedIds.includes(currentQuestion.id)) return
 
     if (answerIndex === currentQuestion.answerIndex) {
       const nextCompleted = [...completedIds, currentQuestion.id]
       setCompletedIds(nextCompleted)
+      // On correct answer, show a riddle that must be solved before scanning QR
+      const riddle = riddles[Math.floor(Math.random() * riddles.length)]
       setResult({
-        status: 'correct',
-        message: `¡Respuesta correcta! ${currentQuestion.correct}`,
+        status: 'riddle',
+        message: '¡Respuesta correcta! Resuelve este acertijo para continuar.',
+        riddle,
       })
       if (nextCompleted.length === questionsData.length) {
         setCurrentQuestionId('')
@@ -252,6 +255,11 @@ function App() {
   const handleContinueAfterRiddle = () => {
     setResult(null)
     setAnswerIndex(null)
+  }
+
+  const handleSolvedRiddle = () => {
+    // mark the riddle as solved and enable QR scanning option
+    setResult({ status: 'correct', message: 'Acertaste el acertijo. Ya puedes leer el QR para continuar.' })
   }
 
   const stopScanning = () => {
@@ -440,24 +448,28 @@ function App() {
             })}
           </div>
           <div className="actions-row">
-            <button type="button" className="button-primary" onClick={handleAnswer} disabled={answerIndex === null || result?.status === 'correct'}>
+            <button type="button" className="button-primary" onClick={handleAnswer} disabled={answerIndex === null || result?.status === 'riddle' || result?.status === 'correct'}>
               Confirmar respuesta
             </button>
           </div>
           {result && (
             <div className={`result ${result.status}`}>
               <p>{result.message}</p>
-              {result.status === 'wrong' && <p className="riddle-text">Acertijo: {result.riddle}</p>}
+              {result.status === 'riddle' && <p className="riddle-text">Acertijo: {result.riddle}</p>}
             </div>
           )}
-          {result?.status === 'wrong' && (
-            <button type="button" className="button-secondary" onClick={handleContinueAfterRiddle}>
-              Continuar cuando hayan acertado el acertijo
-            </button>
+
+          {result?.status === 'riddle' && (
+            <div className="actions-row">
+              <button type="button" className="button-secondary" onClick={handleSolvedRiddle}>
+                Adiviné el acertijo
+              </button>
+            </div>
           )}
+
           {result?.status === 'correct' && (
             <div className="next-step-card">
-              <p>Respuesta correcta. Ahora usa la cámara para leer el QR y continuar.</p>
+              <p>{result.message}</p>
               <div className="actions-row">
                 <button type="button" className="button-primary" onClick={openCameraScanner}>
                   Leer QR con cámara
