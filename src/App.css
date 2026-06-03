@@ -205,13 +205,113 @@ h1 {
   gap: 14px;
 }
 
-.field-row input {
+.field-row input,
+.field-row select {
   width: 100%;
   padding: 14px 16px;
   border-radius: 16px;
   border: 1px solid var(--border);
   font-size: 1rem;
   color: var(--text-h);
+  background: #ffffff;
+}
+
+.qr-card {
+  padding-top: 12px;
+}
+
+.qr-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  gap: 14px;
+}
+
+.qr-preview img {
+  width: 240px;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  background: #ffffff;
+}
+
+.qr-link {
+  max-width: 100%;
+  word-break: break-all;
+  color: var(--text-h);
+  text-align: center;
+}
+
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+
+  .qr-page,
+  .qr-page * {
+    visibility: visible !important;
+  }
+
+  .qr-page,
+  .qr-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    background: #ffffff;
+  }
+
+  .qr-page {
+    padding: 0 !important;
+  }
+
+  .station-header,
+  .lead,
+  .button-primary,
+  .button-secondary,
+  .tab-buttons,
+  .status-card,
+  .qr-link,
+  .badge,
+  .app-header,
+  .cards-grid,
+  .container,
+  .question-panel,
+  .start-card,
+  .result,
+  .next-step-card,
+  .options-list,
+  .actions-row,
+  .status-block,
+  .hint-grid {
+    display: none !important;
+  }
+
+  .qr-card {
+    display: block !important;
+    position: relative;
+    padding: 24px !important;
+    width: 100%;
+    max-width: 100%;
+    page-break-inside: avoid;
+  }
+
+  .qr-card img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  .qr-card h3,
+  .qr-card p {
+    display: none !important;
+  }
 }
 
 .hint-grid {
@@ -296,6 +396,11 @@ h1 {
 }
 
 @media (max-width: 960px) {
+  .container {
+    max-width: 100%;
+    padding: 0 16px;
+  }
+
   .cards-grid {
     grid-template-columns: 1fr;
   }
@@ -304,27 +409,94 @@ h1 {
   .card {
     padding: 20px;
   }
+
+  .qr-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
 }
 
-@media (max-width: 640px) {
-  .app-shell {
-    padding: 16px;
-  }
-
+@media (max-width: 760px) {
   .app-header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
   }
 
-  .field-row {
-    grid-template-columns: 1fr;
+  .app-header > div,
+  .badge {
+    width: 100%;
+  }
+
+  .badge {
+    justify-content: flex-start;
+  }
+
+  .station-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .option-button {
+    padding: 16px 18px;
   }
 
   .actions-row {
     flex-direction: column;
   }
 
-  .station-header {
-    gap: 10px;
+  .status-card {
+    position: static;
+  }
+
+  .qr-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .app-shell {
+    padding: 12px;
+  }
+
+  .app-header {
+    padding: 16px;
+  }
+
+  .card {
+    padding: 18px;
+  }
+
+  .h1,
+  h1 {
+    font-size: 2rem;
+  }
+
+  .badge {
+    justify-content: center;
+  }
+
+  .option-button {
+    padding: 14px 16px;
+    font-size: 0.95rem;
+  }
+
+  .button-primary,
+  .button-secondary,
+  .link-button {
+    width: 100%;
+  }
+
+  .qr-preview img {
+    width: 100%;
+    max-width: 240px;
+  }
+
+  .qr-card {
+    padding: 16px 0;
+  }
+
+  .status-card {
+    padding: 18px;
   }
 }
