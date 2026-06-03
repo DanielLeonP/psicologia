@@ -154,6 +154,8 @@ function App() {
   const [result, setResult] = useState(null)
   const [qrImages, setQrImages] = useState({})
   const [qrError, setQrError] = useState('')
+  const [riddleOrder, setRiddleOrder] = useState(() => shuffle(riddles))
+  const riddleIndexRef = useRef(0)
   const [scanning, setScanning] = useState(false)
   const [scanError, setScanError] = useState('')
   const [scanMessage, setScanMessage] = useState('')
@@ -165,6 +167,18 @@ function App() {
     const available = questionsData.filter((question) => !completedIds.includes(question.id))
     if (available.length === 0) return ''
     return available[Math.floor(Math.random() * available.length)].id
+  }
+
+  const getNextRiddle = () => {
+    let order = riddleOrder
+    if (riddleIndexRef.current >= order.length) {
+      order = shuffle(riddles)
+      setRiddleOrder(order)
+      riddleIndexRef.current = 0
+    }
+    const riddle = order[riddleIndexRef.current]
+    riddleIndexRef.current += 1
+    return riddle
   }
 
   useEffect(() => {
@@ -222,6 +236,8 @@ function App() {
     setAnswerIndex(null)
     setResult(null)
     setView('game')
+    riddleIndexRef.current = 0
+    setRiddleOrder(shuffle(riddles))
     openCameraScanner()
   }
 
@@ -233,7 +249,7 @@ function App() {
       const nextCompleted = [...completedIds, currentQuestion.id]
       setCompletedIds(nextCompleted)
       // On correct answer, show a riddle that must be solved before scanning QR
-      const riddle = riddles[Math.floor(Math.random() * riddles.length)]
+      const riddle = getNextRiddle()
       setResult({
         status: 'riddle',
         message: '¡Respuesta correcta! Resuelve este acertijo para continuar.',
@@ -243,7 +259,7 @@ function App() {
         setCurrentQuestionId('')
       }
     } else {
-      const riddle = riddles[Math.floor(Math.random() * riddles.length)]
+      const riddle = getNextRiddle()
       setResult({
         status: 'wrong',
         message: 'Respuesta incorrecta. Resuelve este acertijo antes de continuar.',
