@@ -115,6 +115,9 @@ Mi dueña se llama Vero,
 pero guardo cada instrumento de limpieza con razón.
 Aquí descansan la escoba y el recogedor,
 listos para dejar todo mejor.`,
+  'Bancas blancas ocuparon mi lugar y por esa razón estoy hasta atrás',
+  'Si a lucio oyes gritar ya sabes en dónde está.',
+  'Si con el uniforme completo no haz de entrar en esa esquina te haz de quedar.'
 ]
 
 const qrSource = 'QR'
@@ -123,7 +126,7 @@ function shuffle(array) {
   const copy = [...array]
   for (let i = copy.length - 1; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * (i + 1))
-    ;[copy[i], copy[j]] = [copy[j], copy[i]]
+      ;[copy[i], copy[j]] = [copy[j], copy[i]]
   }
   return copy
 }
