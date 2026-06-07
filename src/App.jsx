@@ -440,6 +440,30 @@ function App() {
       )
     }
 
+    // If the user answered correctly and a riddle is shown, hide the question/options
+    if (result?.status === 'riddle') {
+      return (
+        <>
+          <div className="station-header">
+            <span className="station-code">{currentQuestion.id}</span>
+            <h2>Pregunta actual</h2>
+            <p className="station-topic">Preguntas completadas: {completedIds.length} / {questionsData.length}</p>
+          </div>
+          <div className="question-panel">
+            <div className={`result ${result.status}`}>
+              <p>{result.message}</p>
+              <p className="riddle-text">Acertijo: {result.riddle}</p>
+            </div>
+            <div className="actions-row">
+              <button type="button" className="button-secondary" onClick={handleSolvedRiddle}>
+                ¿Acertaste el lugar? busca el siguiente QR para seguir jugando.
+              </button>
+            </div>
+          </div>
+        </>
+      )
+    }
+
     return (
       <>
         <div className="station-header">
@@ -564,8 +588,8 @@ function App() {
               <ol>
                 <li>Escanea un QR para comenzar con una pregunta.</li>
                 <li>Responde la pregunta en la app.</li>
-                <li>Si aciertas, vuelve a escanear un QR para continuar con otra pregunta.</li>
-                <li>Si fallas, resuelve el acertijo mostrado y vuelve a intentarlo.</li>
+                <li>Si aciertas, resuelve la pista para encontrar el siguiente QR. </li>
+                <li>Si fallas espera 10 segundos para volver a intentarlo.</li>
               </ol>
             </div>
             <div className="status-block small-block">
